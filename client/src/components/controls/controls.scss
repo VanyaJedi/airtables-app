@@ -1,0 +1,22 @@
+.controls {
+    display: flex;
+    align-items: center;
+    padding: 0 25px;
+    margin-bottom: 25px;
+    height: 40px;
+    width: 100%;
+    margin-bottom: 10px;
+  }
+  
+  .controls__change-table {
+      display: flex;
+      margin-left: 20px;
+
+      button {
+          margin-left: 10px;
+      }
+  }
+
+  .controls__update {
+      margin-left: 20px;
+  }
