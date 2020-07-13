@@ -22,6 +22,7 @@ const store = createStore(
 
 Promise.all([
   store.dispatch(DataOperation.loadTasks()),
+  store.dispatch(DataOperation.loadRoles()),
   store.dispatch(DataOperation.loadUnits()),
   store.dispatch(DataOperation.loadFunctions()),
   store.dispatch(DataOperation.loadRoleUnit())

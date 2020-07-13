@@ -13,12 +13,21 @@ class Main extends React.Component {
 
   render() {
 
-    const {isLoading, tasks, units, functions, roleUnit, addTaskRow} = this.props;
+    const {isLoading, tasks, units, functions, roleUnit, roles, addTaskRow, updateTaskRows, deleteTaskRows} = this.props;
 
     return (
         <main className="page-main">
             <div className="page-main__wrapper wrapper">
-                {isLoading? <Loading/> : <Table tasks={tasks} units={units} functions={functions} roleUnit={roleUnit} addTaskRow={addTaskRow}/>}
+                {isLoading? <Loading/> : <Table 
+                  tasks={tasks} 
+                  units={units}
+                  roles={roles}
+                  functions={functions} 
+                  roleUnit={roleUnit} 
+                  addTaskRow={addTaskRow} 
+                  updateTaskRows={updateTaskRows}
+                  deleteTaskRows={deleteTaskRows}
+                  />}
             </div>
         </main>
     );

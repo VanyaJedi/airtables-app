@@ -5,7 +5,7 @@ import './App.scss';
 import {connect} from "react-redux";
 import {actionCreator as actionCreatorData} from "../../reducer/data/data.js";
 import {Operation as dataOperation} from "../../reducer/data/data";
-import {getLoadingStatus, getTasks, getUnits, getFunctions, getRoleUnit, getAllUnits} from "../../reducer/data/selectors.js";
+import {getLoadingStatus, getTasks, getUnits, getFunctions, getRoleUnit, getAllUnits, getRoles} from "../../reducer/data/selectors.js";
 
 class App extends React.Component {
   constructor(props) {
@@ -13,7 +13,7 @@ class App extends React.Component {
   }
 
   render() {
-    const {isLoading, tasks, units, functions, roleUnit, addTaskRow} = this.props;
+    const {isLoading, tasks, units, functions, roleUnit, roles, addTaskRow, updateTaskRows, deleteTaskRows} = this.props;
     return (
       <div className="App">
         <PageHeader/>
@@ -24,6 +24,9 @@ class App extends React.Component {
           functions={functions}
           roleUnit={roleUnit}
           addTaskRow={addTaskRow}
+          updateTaskRows={updateTaskRows}
+          deleteTaskRows={deleteTaskRows}
+          roles={roles}
         />
       </div>
     );
@@ -31,6 +34,7 @@ class App extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
+  roles: getRoles(state),
   tasks: getTasks(state),
   units: getUnits(state),
   functions: getFunctions(state),
@@ -42,8 +46,15 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
 
   addTaskRow(data) {
-    console.log(data);
-    dispatch(dataOperation.addTaskRow(data));
+    return dispatch(dataOperation.addTaskRow(data));
+  },
+
+  deleteTaskRows(data) {
+    return dispatch(dataOperation.deleteTaskRows(data));
+  },
+
+  updateTaskRows(data) {
+    return dispatch(dataOperation.updateTaskRows(data));
   }
 });
 

@@ -33,3 +33,8 @@ export const getFunctions = (state) => {
 export const getRoleUnit = (state) => {
     return concatData(state[NAME_SPACE].roleUnit);
 }
+
+export const getRoles = (state) => {
+    return concatData(state[NAME_SPACE].roles);
+}
+

@@ -7,6 +7,7 @@ const initialState = {
     units: [],
     functions: [],
     roleUnit: [],
+    roles: [],
 };
 
 const actionType = {
@@ -14,7 +15,8 @@ const actionType = {
     LOAD_TASKS: `LOAD_TASKS`,
     LOAD_UNITS: `LOAD_UNITS`,
     LOAD_FUNCTIONS: `LOAD_FUNCTIONS`,
-    LOAD_ROLE_UNIT: `LOAD_ROLE_UNIT`
+    LOAD_ROLE_UNIT: `LOAD_ROLE_UNIT`,
+    LOAD_ROLES: 'LOAD_ROLES'
 };
 
 const actionCreator = {
@@ -22,6 +24,13 @@ const actionCreator = {
     return {
       type: actionType.LOAD_TASKS,
       payload: tasks,
+    };
+  },
+
+  loadRoles: (roles) => {
+    return {
+      type: actionType.LOAD_ROLES,
+      payload: roles,
     };
   },
 
@@ -63,6 +72,13 @@ const Operation = {
             dispatch(actionCreator.loadTasks(response.data));
         }); 
   },
+
+  loadRoles: () => (dispatch, getState, api) => {
+    return api.get(`/airtables/roles`)
+      .then((response) => {
+            dispatch(actionCreator.loadRoles(response.data));
+        }); 
+  },
   loadUnits: () => (dispatch, getState, api) => {
     return api.get(`/airtables/units`)
       .then((response) => {
@@ -85,7 +101,22 @@ const Operation = {
   addTaskRow: (data) => (dispatch, getState, api) => {
     return api.post(`/airtables/addtask`)
     .then((response) => {
+        return response;
+    }); 
+  },
+
+  deleteTaskRows: (data) => (dispatch, getState, api) => {
+    return api.delete(`/airtables/deletetask/${data}`)
+    .then((response) => {
+        return response;
+    }); 
+  },
+
+  updateTaskRows: (data) => (dispatch, getState, api) => {
+    return api.post(`/airtables/updatetasks`)
+    .then((response) => {
         console.log(response);
+        return response;
     }); 
   },
 };
@@ -102,6 +133,8 @@ const reducer = (state = initialState, action) => {
         return extend(state, {roleUnit: action.payload});    
     case actionType.CHANGE_LOADING:
         return extend(state, {isLoading: action.payload});
+    case actionType.LOAD_ROLES:
+      return extend(state, {roles: action.payload});
     default:
       return state;
   }

@@ -12,7 +12,7 @@ const findLookUpValue = (arr, lookupValue, fieldName) => {
 
 
 export const adaptTasks = (task, units, functions, roles) => {
-    const taskFields = task.fields;
+    const taskFields = task.fields;s
     return {
       'id': task.id,
       'task': taskFields['Task'], 
@@ -30,4 +30,8 @@ export const adaptTasks = (task, units, functions, roles) => {
       'canBeautomatic': taskFields['Can be automated?'],
       'checkList': taskFields['CheckList']
     }
+};
+
+export const adaptToRow = (task) => {
+    
 }

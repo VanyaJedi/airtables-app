@@ -20,3 +20,16 @@
   .controls__update {
       margin-left: 20px;
   }
+
+  .controls__filters {
+      display: flex;
+      list-style: none;
+
+      li {
+          margin-right: 10px;
+      }
+
+      span {
+          font-weight: bold;
+      }
+  }

@@ -4,8 +4,8 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 
 const config = require('config');
-const BASE_ID = config.get('BASE_ID_TEST');
-const API_KEY = config.get('API_KEY_TEST');
+const BASE_ID = config.get('BASE_ID_PROD');
+const API_KEY = config.get('API_KEY_PROD');
 
 
 const Airtable = require('airtable');
@@ -24,6 +24,7 @@ router.use(bodyParser.urlencoded({ extended: true }));
 router.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Headers', 'origin, content-type, accept');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
   next();
 })
 
@@ -37,6 +38,18 @@ router.get('/tasks', (req, res, next) => {
       }).then(() => {
         res.json(initData);
       })
+});
+
+router.get('/roles', (req, res, next) => {
+  const initData = [];
+  base('Role').select({
+      view: 'roles_all'
+    }).eachPage((records, fetchNextPage) => {
+      initData.push(records);
+      fetchNextPage();
+    }).then(() => {
+      res.json(initData);
+    })
 });
 
 router.get('/units', (req, res, next) => {
@@ -77,9 +90,30 @@ router.get('/roleunit', (req, res, next) => {
 
 router.post('/addtask', (req, res, next) => {
   base('Tasks').create(req.body)
-  .then(()=> {
-    console.log(req.body)
-    res.json(req.body);
+  .then((data)=> {
+    res.json(data);
+  })
+});
+
+router.delete('/deletetask/:id', (req, res, next) => {
+  base('Tasks').destroy(req.params.id)
+  .then((data)=> {
+    res.json(data);
+  })
+  .catch((err) => {
+    console.log(err);
+  })
+});
+
+
+router.post('/updatetasks', (req, res, next) => {
+  console.log(req)
+  base('Tasks').update(req.body)
+  .then((data)=> {
+    res.json(data);
+  })
+  .catch((err) => {
+    console.log(err);
   })
 });
 
