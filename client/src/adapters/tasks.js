@@ -12,7 +12,7 @@ const findLookUpValue = (arr, lookupValue, fieldName) => {
 
 
 export const adaptTasks = (task, units, functions, roles) => {
-    const taskFields = task.fields;s
+    const taskFields = task.fields;
     return {
       'id': task.id,
       'task': taskFields['Task'], 
