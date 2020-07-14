@@ -2,18 +2,18 @@
 import {extend} from "../../utils.js";
 
 const initialState = {
-    filters: []
+    activeTab: 'tasks'
 };
 
 const actionType = {
-    SET_FILTER: `SET_FILTER`,
+    SWITCH_TAB: `SWITCH_TAB`,
 };
 
 const actionCreator = {
-  setFilter: (filter) => {
+  switchTab: (tab) => {
     return {
-      type: actionType.SET_FILTER,
-      payload: filter,
+      type: actionType.SWITCH_TAB,
+      payload: tab,
     };
   },
 };
@@ -21,9 +21,8 @@ const actionCreator = {
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case actionType.SET_FILTER:
-      return extend(state, {filters: action.payload});
-    
+    case actionType.SWITCH_TAB:
+      return extend(state, {activeTab: action.payload});
     default:
       return state;
   }

@@ -5,5 +5,5 @@ import nameSpace from "./name-space.js";
 
 export default combineReducers({
   [nameSpace.DATA]: data,
-  //[nameSpace.APP]: app,
+  [nameSpace.APP]: app,
 });

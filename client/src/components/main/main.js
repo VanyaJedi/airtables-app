@@ -4,6 +4,7 @@ import Table  from '../table/table';
 import './main.scss';
 import Loading from '../loading/loading';
 import Controls from "../controls/controls";
+import CheckList from "../checklist/checklist";
 
 class Main extends React.Component {
 
@@ -11,14 +12,17 @@ class Main extends React.Component {
     super(props);
   }
 
-  render() {
+  renderMain() {
+    const {isLoading, activeTab, tasks, units, functions, roleUnit, roles, addTaskRow, updateTaskRows, deleteTaskRows} = this.props;
 
-    const {isLoading, tasks, units, functions, roleUnit, roles, addTaskRow, updateTaskRows, deleteTaskRows} = this.props;
+    if (isLoading) {
+      return <Loading/>;
+    }
 
-    return (
-        <main className="page-main">
-            <div className="page-main__wrapper wrapper">
-                {isLoading? <Loading/> : <Table 
+    switch (activeTab) {
+      case 'tasks':
+        return  (
+              <Table 
                   tasks={tasks} 
                   units={units}
                   roles={roles}
@@ -27,8 +31,24 @@ class Main extends React.Component {
                   addTaskRow={addTaskRow} 
                   updateTaskRows={updateTaskRows}
                   deleteTaskRows={deleteTaskRows}
-                  />}
-            </div>
+                />
+                )
+      case 'checklist':
+        return <CheckList/>
+      default:
+        return <span>something went wrong</span>
+    }
+
+  }
+
+  render() {
+
+    
+    const {isLoading, tasks, units, functions, roleUnit, roles, addTaskRow, updateTaskRows, deleteTaskRows} = this.props;
+
+    return (
+        <main className="page-main">
+           {this.renderMain()}
         </main>
     );
   }

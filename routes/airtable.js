@@ -89,6 +89,7 @@ router.get('/roleunit', (req, res, next) => {
 });
 
 router.post('/addtask', (req, res, next) => {
+  console.log(req.body);
   base('Tasks').create(req.body)
   .then((data)=> {
     res.json(data);
@@ -96,6 +97,7 @@ router.post('/addtask', (req, res, next) => {
 });
 
 router.delete('/deletetask/:id', (req, res, next) => {
+  console.log(req.params.id);
   base('Tasks').destroy(req.params.id)
   .then((data)=> {
     res.json(data);
@@ -106,9 +108,8 @@ router.delete('/deletetask/:id', (req, res, next) => {
 });
 
 
-router.post('/updatetasks', (req, res, next) => {
-  console.log(req)
-  base('Tasks').update(req.body)
+router.put('/updatetasks/', (req, res, next) => {
+  base('Tasks').update(req.body.data)
   .then((data)=> {
     res.json(data);
   })

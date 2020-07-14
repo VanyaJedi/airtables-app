@@ -5,7 +5,7 @@ import "tabulator-tables/dist/css/tabulator.min.css"; //import Tabulator stylesh
 import './table.scss';
 import {adaptTasks} from "../../adapters/tasks.js";
 import Controls from "../controls/controls";
-import tasksTable from '../../tablesStructure/tasks';
+import getTableStructure from '../../tablesStructure/tasks';
 
 
 class Table extends React.Component {
@@ -26,12 +26,15 @@ class Table extends React.Component {
         filterRoles: 'All'
       };
 
+      this.dataToUpdate = [];
+
       this.setFilterUnits = this.setFilterUnits.bind(this);
       this.setFilterRoles = this.setFilterRoles.bind(this);
       this.addEmptyTaskRow = this.addEmptyTaskRow.bind(this);
       this.getEditedRows = this.getEditedRows.bind(this);
       this.deleteRow = this.deleteRow.bind(this);
       this.rowClickHandler = this.rowClickHandler.bind(this);
+      this.cleanDataToUpdate = this.cleanDataToUpdate.bind(this);
   }
 
   getEditedRows() {
@@ -62,12 +65,21 @@ class Table extends React.Component {
     })
   }
 
-  updateSelectedRow(row) {
+  cleanDataToUpdate() {
+    this.dataToUpdate = [];
   }
 
   deleteRow() {
     this._selectedRow.tabulatorRow.delete();
   }
+
+  getParams (arr, field) {
+    return arr.map((row) => {
+      return row.fields[field];
+    })
+  }
+  
+  
 
   rowClickHandler(e, row) {
     if (row === this._selectedRow.tabulatorRow ) {
@@ -89,19 +101,25 @@ class Table extends React.Component {
 
     this._table = new Tabulator(this._tableRef, {
         data: this._tableData, //link data to table
-        columns: tasksTable, //define table columns
+        columns: getTableStructure(this.props.functions), //define table columns
         //pagination:"local",
         //paginationSize:50,
         maxHeight:"100%",
 
-        cellEditing:function(cell){
-          console.log(cell);
+        cellEditing: (cell) => {
+          const editedData = cell._cell.row.data;
+          const indexIfAlreadyExist = this.dataToUpdate.findIndex((value) => value.id === editedData.id);
+          if (indexIfAlreadyExist > -1) {
+            this.dataToUpdate.splice(indexIfAlreadyExist, 1);
+          }
+          this.dataToUpdate.push(editedData);
         },
 
         rowClick: this.rowClickHandler
         ,
         selectable:1,
       });
+    
   }
 
   generateFiltersObject() {
@@ -147,18 +165,21 @@ class Table extends React.Component {
     return (
         <React.Fragment>
           <Controls 
-          roles={this.props.roles}
-          units={this.props.units} 
-          roleUnit={this.props.roleUnit} 
-          addTaskRow={this.props.addTaskRow} 
-          addEmptyTaskRow={this.addEmptyTaskRow} 
-          setFilterUnits={this.setFilterUnits}
-          setFilterRoles={this.setFilterRoles}
-          getEditedRows={this.getEditedRows}
-          updateTaskRows={this.props.updateTaskRows}
-          deleteTaskRows={this.props.deleteTaskRows}
-          deleteRow={this.deleteRow}
-          selectedRow={this._selectedRow}
+            roles={this.props.roles}
+            units={this.props.units} 
+            roleUnit={this.props.roleUnit} 
+            functions={this.props.functions}
+            addTaskRow={this.props.addTaskRow} 
+            addEmptyTaskRow={this.addEmptyTaskRow} 
+            setFilterUnits={this.setFilterUnits}
+            setFilterRoles={this.setFilterRoles}
+            getEditedRows={this.getEditedRows}
+            updateTaskRows={this.props.updateTaskRows}
+            deleteTaskRows={this.props.deleteTaskRows}
+            deleteRow={this.deleteRow}
+            selectedRow={this._selectedRow}
+            dataToUpdate={this.dataToUpdate}
+            cleanDataToUpdate={this.cleanDataToUpdate}
           />
           <div className="table">
               <div ref={el => (this._tableRef = el)} id="tbl"></div>

@@ -32,6 +32,31 @@ export const adaptTasks = (task, units, functions, roles) => {
     }
 };
 
-export const adaptToRow = (task) => {
-    
+const fieldAdapter = (targetField, fieldValue, table) => {
+  const index = table.findIndex((element) => {
+    return element.fields[targetField] === fieldValue;
+  })
+  if (index === -1) {
+    return '';
+  }
+  return [table[index].id]
+}
+
+export const adaptDataToRaw = (data, functions) => {
+  return data.map((item) => {
+    return {
+      "id": item.id,
+      "fields": {
+        "Task": item.task,
+        " How to do: Answer to test question": item.howToDo,
+        "Sequence": item.sequence,
+        "Time required (mins)": item.timeReq,
+        "Frequency per week": item.freqPerWeek,
+        "Importance": item.importance,
+        "Can be automated?": item.canBeautomatic,
+        "Checklist": item.checkList,
+        "Role and Function": fieldAdapter('Role_function', item.roleAndFunc, functions)
+      }
+    }
+  })
 }

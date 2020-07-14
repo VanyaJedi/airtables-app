@@ -1,0 +1,16 @@
+.checklist {
+    display: table;
+    margin: 0 auto;
+    border-collapse: collapse;
+    height: 100%;
+}
+
+.checklist__item {
+    display: table-row;
+
+    span {
+        border: 1px solid black;
+        display: table-cell;
+        padding: 5px 10px;
+    }
+}

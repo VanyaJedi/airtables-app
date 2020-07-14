@@ -113,11 +113,9 @@ const Operation = {
   },
 
   updateTaskRows: (data) => (dispatch, getState, api) => {
-    return api.post(`/airtables/updatetasks`)
-    .then((response) => {
-        console.log(response);
-        return response;
-    }); 
+    return api.put(`/airtables/updatetasks/`, {
+      data: data
+    })
   },
 };
 

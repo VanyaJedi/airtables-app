@@ -3,9 +3,10 @@ import PageHeader from '../header/page-header';
 import Main  from '../main/main';
 import './App.scss';
 import {connect} from "react-redux";
-import {actionCreator as actionCreatorData} from "../../reducer/data/data.js";
+import {actionCreator as actionCreatorApp} from "../../reducer/app/app.js";
 import {Operation as dataOperation} from "../../reducer/data/data";
-import {getLoadingStatus, getTasks, getUnits, getFunctions, getRoleUnit, getAllUnits, getRoles} from "../../reducer/data/selectors.js";
+import {getLoadingStatus, getTasks, getUnits, getFunctions, getRoleUnit, getRoles} from "../../reducer/data/selectors.js";
+import {getActiveTab} from "../../reducer/app/selectors.js";
 
 class App extends React.Component {
   constructor(props) {
@@ -13,12 +14,16 @@ class App extends React.Component {
   }
 
   render() {
-    const {isLoading, tasks, units, functions, roleUnit, roles, addTaskRow, updateTaskRows, deleteTaskRows} = this.props;
+    const {isLoading, tasks, units, functions, roleUnit, roles, addTaskRow, updateTaskRows, deleteTaskRows, activeTab, switchActiveTab} = this.props;
     return (
       <div className="App">
-        <PageHeader/>
+        <PageHeader 
+          activeTab={activeTab} 
+          switchActiveTab={switchActiveTab}
+        />
         <Main 
           isLoading={isLoading}
+          activeTab={activeTab}
           tasks={tasks}
           units={units}
           functions={functions}
@@ -34,6 +39,7 @@ class App extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
+  activeTab: getActiveTab(state),
   roles: getRoles(state),
   tasks: getTasks(state),
   units: getUnits(state),
@@ -55,7 +61,12 @@ const mapDispatchToProps = (dispatch) => ({
 
   updateTaskRows(data) {
     return dispatch(dataOperation.updateTaskRows(data));
+  },
+
+  switchActiveTab(data) {
+    return dispatch(actionCreatorApp.switchTab(data));
   }
+  
 });
 
 export {App};

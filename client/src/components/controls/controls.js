@@ -1,7 +1,23 @@
 import React from 'react';
 import './controls.scss';
+import {adaptDataToRaw} from "../../adapters/tasks";
 
-const Controls = ({units, roles, roleUnit, setFilterUnits, setFilterRoles, addTaskRow, addEmptyTaskRow, updateTaskRows, deleteTaskRows, selectedRow, deleteRow}) => {
+const Controls = ({ units, 
+                    roles, 
+                    functions,
+                    roleUnit, 
+                    setFilterUnits, 
+                    setFilterRoles, 
+                    addTaskRow, 
+                    addEmptyTaskRow, 
+                    updateTaskRows, 
+                    deleteTaskRows, 
+                    selectedRow, 
+                    deleteRow,
+                    dataToUpdate,
+                    cleanDataToUpdate
+                  }) => {
+
 
     const emptyRow = [{
         "fields": {
@@ -64,10 +80,10 @@ const Controls = ({units, roles, roleUnit, setFilterUnits, setFilterRoles, addTa
             }} type="button" className="btn controls__add">Добавить строчку</button>
             <button   onClick=  {()=>{
                 if (selectedRow.airtableId) {
-                 deleteTaskRows([selectedRow.airtableId])
-                .then((res) => {
-                  deleteRow(selectedRow.tabulatorRow);
-                })
+                  deleteTaskRows([selectedRow.airtableId])
+                  .then((res) => {
+                    deleteRow(selectedRow.tabulatorRow);
+                  })
                 }
                
 
@@ -76,28 +92,11 @@ const Controls = ({units, roles, roleUnit, setFilterUnits, setFilterRoles, addTa
           </div>
           <button
             onClick={()=>{
-                updateTaskRows(
-                  [
-                    {
-                    "id": "recAnw4BQNmDFKiy9",
-                    "fields": {
-                      "Task": "ф",
-                      " How to do: Answer to test question": "First reply must be within 60 seconds. Most of the answers can be found in our FAQ, and you can copy and paste the link  into the chat, guiding the us...",
-                      "Sequence": "1",
-                      "Time required (mins)": 5,
-                      "Frequency per week": 300,
-                      "Importance": "5/5",
-                      "Can be automated?": "No",
-                      "Checklist": "Yes",
-                      "Question type. 1=Yes/No 2=Open text field": "2",
-                      "Functions copy": "CS specialist 1 line 01_Respond",
-                      "Role and Function": [
-                        "recBtzR6golcYoJcI"
-                      ]
-                    }
-                  }
-                ])
-                .then((res) => {console.log(res)});
+              const adaptedData = adaptDataToRaw(dataToUpdate, functions);
+                updateTaskRows(adaptedData)
+                .then((res) => {
+                  cleanDataToUpdate()
+                });
             }}
             type="button" className="btn controls__update">Обновить записи в таблице</button>
         </div>
