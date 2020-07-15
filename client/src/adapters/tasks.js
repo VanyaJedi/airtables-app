@@ -1,4 +1,4 @@
-const findLookUpValue = (arr, lookupValue, fieldName) => {
+export const findLookUpValue = (arr, lookupValue, fieldName) => {
     try {
       if (lookupValue) {
       return arr.filter((func) => { return func.id === lookupValue[0]})[0].fields[fieldName];
@@ -50,8 +50,8 @@ export const adaptDataToRaw = (data, functions) => {
         "Task": item.task,
         " How to do: Answer to test question": item.howToDo,
         "Sequence": item.sequence,
-        "Time required (mins)": item.timeReq,
-        "Frequency per week": item.freqPerWeek,
+        "Time required (mins)": parseFloat(item.timeReq),
+        "Frequency per week": parseFloat(item.freqPerWeek),
         "Importance": item.importance,
         "Can be automated?": item.canBeautomatic,
         "Checklist": item.checkList,

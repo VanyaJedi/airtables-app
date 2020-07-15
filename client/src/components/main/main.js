@@ -1,16 +1,11 @@
 import React from 'react';
-import PageHeader from '../header/page-header';
 import Table  from '../table/table';
 import './main.scss';
 import Loading from '../loading/loading';
-import Controls from "../controls/controls";
 import CheckList from "../checklist/checklist";
 
 class Main extends React.Component {
 
-  constructor(props) {
-    super(props);
-  }
 
   renderMain() {
     const {isLoading, activeTab, tasks, units, functions, roleUnit, roles, addTaskRow, updateTaskRows, deleteTaskRows} = this.props;
@@ -42,10 +37,7 @@ class Main extends React.Component {
   }
 
   render() {
-
-    
-    const {isLoading, tasks, units, functions, roleUnit, roles, addTaskRow, updateTaskRows, deleteTaskRows} = this.props;
-
+ 
     return (
         <main className="page-main">
            {this.renderMain()}

@@ -20,6 +20,7 @@ const store = createStore(
     )
 );
 
+
 Promise.all([
   store.dispatch(DataOperation.loadTasks()),
   store.dispatch(DataOperation.loadRoles()),

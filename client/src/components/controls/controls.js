@@ -15,7 +15,8 @@ const Controls = ({ units,
                     selectedRow, 
                     deleteRow,
                     dataToUpdate,
-                    cleanDataToUpdate
+                    cleanDataToUpdate,
+                    rolesBasedOnUnits
                   }) => {
 
 
@@ -23,39 +24,22 @@ const Controls = ({ units,
         "fields": {
         }
       }];
+      
     const unitList = units.map((unit) => {
         if (unit.fields.Unit) {
-            return unit.fields.Unit;
+            return unit.fields.Unit
         }
         return '';
+    }).filter((value, index, self) => {
+      return self.indexOf(value) === index;
     })
 
-    const roleList = roles.map((role) => {
-      if (role.fields.Role) {
-        return role.fields.Role;
-    }
-    return '';
-  })
+
 
     return (
         <div className="controls">
           <ul className="controls__filters">
-            <li>
-              <span>Role</span>
-              <select 
-                onChange={(evt)=>{
-                  setFilterRoles(evt.target.value);
-                }} 
-                className="controls__units" id="roleunit" name="roleunit">
-                    <option value="All">All</option>
-                    {roleList.map((role)=>{
-                        return (
-                            <option key={role} value={role}>{role}</option>
-                        )
-                    })}
-              </select>
-            </li>
-            <li>
+          <li>
               <span>Unit</span>
               <select 
                 onChange={(evt)=>{
@@ -70,7 +54,21 @@ const Controls = ({ units,
                     })}
               </select>
             </li>
-           
+            <li>
+              <span>Role</span>
+              <select 
+                onChange={(evt)=>{
+                  setFilterRoles(evt.target.value);
+                }} 
+                className="controls__units" id="roleunit" name="roleunit">
+                    <option value="All">All</option>
+                    {rolesBasedOnUnits.map((role)=>{
+                        return (
+                            <option key={role} value={role}>{role}</option>
+                        )
+                    })}
+              </select>
+            </li>
           </ul>
           <div className="controls__change-table">
             <button onClick={()=>{
@@ -93,10 +91,11 @@ const Controls = ({ units,
           <button
             onClick={()=>{
               const adaptedData = adaptDataToRaw(dataToUpdate, functions);
-                updateTaskRows(adaptedData)
-                .then((res) => {
-                  cleanDataToUpdate()
-                });
+              console.log(adaptedData);
+              updateTaskRows(adaptedData)
+              .then((res) => {
+                cleanDataToUpdate()
+              });
             }}
             type="button" className="btn controls__update">Обновить записи в таблице</button>
         </div>

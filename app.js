@@ -12,8 +12,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-
 app.use('/airtables/', require('./routes/airtable'));
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -30,6 +30,11 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+
+
+
+
 
 app.listen(3001, () => console.log(`App has been started...`));
 module.exports = app;

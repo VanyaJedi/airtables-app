@@ -69,32 +69,32 @@ const Operation = {
   loadTasks: () => (dispatch, getState, api) => {
     return api.get(`/airtables/tasks`)
       .then((response) => {
-            dispatch(actionCreator.loadTasks(response.data));
+          dispatch(actionCreator.loadTasks(response.data));
         }); 
   },
 
   loadRoles: () => (dispatch, getState, api) => {
     return api.get(`/airtables/roles`)
       .then((response) => {
-            dispatch(actionCreator.loadRoles(response.data));
+          dispatch(actionCreator.loadRoles(response.data));
         }); 
   },
   loadUnits: () => (dispatch, getState, api) => {
     return api.get(`/airtables/units`)
       .then((response) => {
-            dispatch(actionCreator.loadUnits(response.data));
+          dispatch(actionCreator.loadUnits(response.data));
         }); 
   },
   loadFunctions: () => (dispatch, getState, api) => {
     return api.get(`/airtables/functions`)
       .then((response) => {
-            dispatch(actionCreator.loadFunctions(response.data));
+          dispatch(actionCreator.loadFunctions(response.data));
         }); 
   },
   loadRoleUnit: () => (dispatch, getState, api) => {
     return api.get(`/airtables/roleunit`)
       .then((response) => {
-            dispatch(actionCreator.loadRoleUnit(response.data));
+          dispatch(actionCreator.loadRoleUnit(response.data));
         }); 
   },
 

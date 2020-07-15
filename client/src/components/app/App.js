@@ -9,9 +9,6 @@ import {getLoadingStatus, getTasks, getUnits, getFunctions, getRoleUnit, getRole
 import {getActiveTab} from "../../reducer/app/selectors.js";
 
 class App extends React.Component {
-  constructor(props) {
-    super(props);
-  }
 
   render() {
     const {isLoading, tasks, units, functions, roleUnit, roles, addTaskRow, updateTaskRows, deleteTaskRows, activeTab, switchActiveTab} = this.props;

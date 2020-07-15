@@ -1,6 +1,5 @@
 
 import nameSpace from "../name-space.js";
-import {createSelector} from "reselect";
 
 const NAME_SPACE = nameSpace.DATA;
 
