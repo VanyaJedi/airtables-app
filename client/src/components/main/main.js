@@ -40,7 +40,9 @@ class Main extends React.Component {
  
     return (
         <main className="page-main">
-           {this.renderMain()}
+          <div className="page-main__wrapper wrapper">
+            {this.renderMain()}
+          </div>  
         </main>
     );
   }
