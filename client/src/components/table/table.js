@@ -35,6 +35,7 @@ class Table extends React.Component {
       this.deleteRow = this.deleteRow.bind(this);
       this.rowClickHandler = this.rowClickHandler.bind(this);
       this.cleanDataToUpdate = this.cleanDataToUpdate.bind(this);
+      this.getDataToUpdate = this.getDataToUpdate.bind(this);
   }
 
   //Data manipulations
@@ -111,6 +112,10 @@ class Table extends React.Component {
     }
   }
 
+  getDataToUpdate() {
+    return this.dataToUpdate;
+  }
+
   //Handlers
   rowClickHandler(e, row) {
     if (row === this._selectedRow.tabulatorRow ) {
@@ -137,6 +142,7 @@ class Table extends React.Component {
         maxHeight:"100%",
 
         cellEdited: (cell) => {
+          
           const editedData = cell.getData();
           const currentData = this._table.getData();
           const editedIndex = currentData.findIndex(value => value.id === editedData.id);
@@ -147,7 +153,6 @@ class Table extends React.Component {
           
           
           if (targetFunction) {
-            console.log(editedData);
             const roleId = targetFunction.fields['Role'];
             const unitId = targetFunction.fields['Unit from role'];
           
@@ -169,6 +174,9 @@ class Table extends React.Component {
             this.dataToUpdate.splice(indexIfAlreadyExist, 1);
           }
           this.dataToUpdate.push(editedData);
+          this.dataToUpdate= this.dataToUpdate.slice();
+
+          console.log(this.dataToUpdate);
         },
 
         rowClick: this.rowClickHandler
@@ -241,6 +249,7 @@ class Table extends React.Component {
             deleteRow={this.deleteRow}
             selectedRow={this._selectedRow}
             dataToUpdate={this.dataToUpdate}
+            getDataToUpdate={this.getDataToUpdate}
             cleanDataToUpdate={this.cleanDataToUpdate}
             rolesBasedOnUnits={this.makeRolesListBasedOnUnits()}
           />

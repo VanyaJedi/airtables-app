@@ -16,9 +16,10 @@ const Controls = ({ units,
                     deleteRow,
                     dataToUpdate,
                     cleanDataToUpdate,
-                    rolesBasedOnUnits
+                    rolesBasedOnUnits,
+                    getDataToUpdate
                   }) => {
-
+    
 
     const emptyRow = [{
         "fields": {
@@ -90,8 +91,9 @@ const Controls = ({ units,
           </div>
           <button
             onClick={()=>{
-              const adaptedData = adaptDataToRaw(dataToUpdate, functions);
-              console.log(adaptedData);
+              console.log(getDataToUpdate());
+              const adaptedData = adaptDataToRaw(getDataToUpdate(), functions);
+              console.log(dataToUpdate);
               updateTaskRows(adaptedData)
               .then((res) => {
                 cleanDataToUpdate()
