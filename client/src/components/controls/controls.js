@@ -19,7 +19,6 @@ const Controls = ({ units,
                     rolesBasedOnUnits,
                     getDataToUpdate
                   }) => {
-    
 
     const emptyRow = [{
         "fields": {

@@ -49,11 +49,30 @@ class Table extends React.Component {
   }
 
   addEmptyTaskRow(airtableRow) {
-    const emptyRow = {};
-    emptyRow.id = airtableRow.data.id;
-    this._table.addRow(emptyRow, true);
+    const empyTest = {
+      canBeautomatic: undefined,
+      checkList: undefined,
+      freqPerWeek: undefined,
+      funcLong: undefined,
+      funcShort: undefined,
+      howToDo: undefined,
+      id: undefined,
+      importance: undefined,
+      role: undefined,
+      roleAndFunc: undefined,
+      sequence: undefined,
+      task: undefined,
+      timeReq: undefined,
+      totalTimePerweek: undefined,
+      unit: undefined
+  }
+    //const emptyRow = {};
+    empyTest.id = airtableRow.data.id;;
+    //emptyRow.id = airtableRow.data.id;
+    //this._table.addRow(emptyRow, true);
+    this._tableData.unshift(empyTest);
 
-    this.getEditedRows();
+    //this.getEditedRows();
   }
 
   setFilterUnits(filter) {
@@ -135,6 +154,7 @@ class Table extends React.Component {
       return adaptTasks(task, this.props.units, this.props.functions, this.props.roleUnit)
     })
 
+
     this._table = new Tabulator(this._tableRef, {
         data: this._tableData, //link data to table
         reactiveData:true,
@@ -142,16 +162,20 @@ class Table extends React.Component {
         maxHeight:"100%",
 
         cellEdited: (cell) => {
-          
           const editedData = cell.getData();
+          console.log(editedData);
           const currentData = this._table.getData();
           const editedIndex = currentData.findIndex(value => value.id === editedData.id);
+
 
           const targetFunction = this.props.functions.find((value) => {
             return value.fields['Role_function'] === editedData.roleAndFunc
           });
-          
-          
+          console.log(editedData);
+          console.log(targetFunction);
+          console.log(editedIndex);
+          //this._tableData = this._table.getData();
+          console.log(this._tableData[editedIndex])
           if (targetFunction) {
             const roleId = targetFunction.fields['Role'];
             const unitId = targetFunction.fields['Unit from role'];
@@ -175,8 +199,6 @@ class Table extends React.Component {
           }
           this.dataToUpdate.push(editedData);
           this.dataToUpdate= this.dataToUpdate.slice();
-
-          console.log(this.dataToUpdate);
         },
 
         rowClick: this.rowClickHandler
