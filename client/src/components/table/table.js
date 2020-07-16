@@ -92,7 +92,9 @@ class Table extends React.Component {
   }
 
   deleteRow() {
-    this._selectedRow.tabulatorRow.delete();
+    const idRow = this._selectedRow.tabulatorRow.getData().id;
+    const indexToDelete = this._tableData.findIndex((value) => value.id === idRow);
+    this._tableData.splice(indexToDelete, 1);
   }
 
   getParams (arr, field) {
@@ -163,7 +165,6 @@ class Table extends React.Component {
 
         cellEdited: (cell) => {
           const editedData = cell.getData();
-          console.log(editedData);
           const currentData = this._table.getData();
           const editedIndex = currentData.findIndex(value => value.id === editedData.id);
 
@@ -171,11 +172,7 @@ class Table extends React.Component {
           const targetFunction = this.props.functions.find((value) => {
             return value.fields['Role_function'] === editedData.roleAndFunc
           });
-          console.log(editedData);
-          console.log(targetFunction);
-          console.log(editedIndex);
-          //this._tableData = this._table.getData();
-          console.log(this._tableData[editedIndex])
+
           if (targetFunction) {
             const roleId = targetFunction.fields['Role'];
             const unitId = targetFunction.fields['Unit from role'];
