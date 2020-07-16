@@ -4,8 +4,8 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 
 const config = require('config');
-const BASE_ID = config.get('BASE_ID_PROD');
-const API_KEY = config.get('API_KEY_PROD');
+const BASE_ID = config.get('BASE_ID_TEST');
+const API_KEY = config.get('API_KEY_TEST');
 
 
 const Airtable = require('airtable');

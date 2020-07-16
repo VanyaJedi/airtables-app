@@ -138,24 +138,31 @@ class Table extends React.Component {
 
         cellEdited: (cell) => {
           const editedData = cell.getData();
-          const editedIndex = this._tableData.findIndex(value => value.id === editedData.id);
+          const currentData = this._table.getData();
+          const editedIndex = currentData.findIndex(value => value.id === editedData.id);
 
           const targetFunction = this.props.functions.find((value) => {
             return value.fields['Role_function'] === editedData.roleAndFunc
           });
-
-          const roleId = targetFunction.fields['Role'];
-          const unitId = targetFunction.fields['Unit from role'];
           
-          const role = findLookUpValue(this.props.roleUnit, roleId,  'Role in Unit');
-          const unit = findLookUpValue(this.props.units, unitId,  'Unit');
-          const funcShort = targetFunction.fields['Function_short'];
-          const funcLong = targetFunction.fields['Function_long'];
+          
+          if (targetFunction) {
+            console.log(editedData);
+            const roleId = targetFunction.fields['Role'];
+            const unitId = targetFunction.fields['Unit from role'];
+          
+            const role = findLookUpValue(this.props.roleUnit, roleId,  'Role in Unit');
+            const unit = findLookUpValue(this.props.units, unitId,  'Unit');
+            const funcShort = targetFunction.fields['Function_short'];
+            const funcLong = targetFunction.fields['Function_long'];
 
-          this._tableData[editedIndex].role = role;
-          this._tableData[editedIndex].unit = unit;
-          this._tableData[editedIndex].funcShort = funcShort;
-          this._tableData[editedIndex].funcLong = funcLong;
+            this._tableData[editedIndex].role = role;
+            this._tableData[editedIndex].unit = unit;
+            this._tableData[editedIndex].funcShort = funcShort;
+            this._tableData[editedIndex].funcLong = funcLong;
+          }
+
+         
           
           const indexIfAlreadyExist = this.dataToUpdate.findIndex((value) => value.id === editedData.id);
           if (indexIfAlreadyExist > -1) {
