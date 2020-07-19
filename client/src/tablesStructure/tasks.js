@@ -19,8 +19,25 @@ const getTableStructure = (functions) => {
         {title:"Total time per week", field:"totalTimePerweek",},
         {title:"Importance", field:"importance", editor:"input", formatter:"textarea", },
         {title:"Can be Automated", field:"canBeautomatic", editor:"input", formatter:"textarea", },
-        //{title:"CheckList", field:"checkList", editor:"input", formatter:"textarea", },
     ];
 }
 
-export default getTableStructure;
+const emptyRow = {
+  canBeautomatic: undefined,
+  checkList: undefined,
+  freqPerWeek: undefined,
+  funcLong: undefined,
+  funcShort: undefined,
+  howToDo: undefined,
+  id: undefined,
+  importance: undefined,
+  role: undefined,
+  roleAndFunc: undefined,
+  sequence: undefined,
+  task: undefined,
+  timeReq: undefined,
+  totalTimePerweek: undefined,
+  unit: undefined
+}
+
+export {getTableStructure, emptyRow};

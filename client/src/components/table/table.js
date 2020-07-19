@@ -5,10 +5,11 @@ import "tabulator-tables/dist/css/tabulator.min.css"; //import Tabulator stylesh
 import './table.scss';
 import {adaptTasks, findLookUpValue} from "../../adapters/tasks.js";
 import Controls from "../controls/controls";
-import getTableStructure from '../../tablesStructure/tasks';
+import {getTableStructure, emptyRow} from '../../tablesStructure/tasks';
+import {extend} from '../../utils.js';
 
 
-class Table extends React.Component {
+class Table extends React.PureComponent {
   constructor(props){
       super(props);
       this._tableRef = React.createRef();
@@ -34,6 +35,7 @@ class Table extends React.Component {
       this.getEditedRows = this.getEditedRows.bind(this);
       this.deleteRow = this.deleteRow.bind(this);
       this.rowClickHandler = this.rowClickHandler.bind(this);
+      this.cellEditHandler = this.cellEditHandler.bind(this);
       this.cleanDataToUpdate = this.cleanDataToUpdate.bind(this);
       this.getDataToUpdate = this.getDataToUpdate.bind(this);
   }
@@ -49,30 +51,8 @@ class Table extends React.Component {
   }
 
   addEmptyTaskRow(airtableRow) {
-    const empyTest = {
-      canBeautomatic: undefined,
-      checkList: undefined,
-      freqPerWeek: undefined,
-      funcLong: undefined,
-      funcShort: undefined,
-      howToDo: undefined,
-      id: undefined,
-      importance: undefined,
-      role: undefined,
-      roleAndFunc: undefined,
-      sequence: undefined,
-      task: undefined,
-      timeReq: undefined,
-      totalTimePerweek: undefined,
-      unit: undefined
-  }
-    //const emptyRow = {};
-    empyTest.id = airtableRow.data.id;;
-    //emptyRow.id = airtableRow.data.id;
-    //this._table.addRow(emptyRow, true);
-    this._tableData.unshift(empyTest);
-
-    //this.getEditedRows();
+    const rowToAdd = extend(emptyRow, {id: airtableRow.data.id});
+    this._tableData.unshift(rowToAdd);
   }
 
   setFilterUnits(filter) {
@@ -149,6 +129,37 @@ class Table extends React.Component {
     this._selectedRow.airtableId = row.getData().id;
   }
 
+  cellEditHandler(cell) {
+    const editedData = cell.getData();
+    const currentData = this._table.getData();
+    const editedIndex = currentData.findIndex(value => value.id === editedData.id);
+
+    const targetFunction = this.props.functions.find((value) => value.fields['Role_function'] === editedData.roleAndFunc);
+
+    if (targetFunction) {
+      const roleId = targetFunction.fields['Role'];
+      const unitId = targetFunction.fields['Unit from role'];
+    
+      const role = findLookUpValue(this.props.roleUnit, roleId,  'Role in Unit');
+      const unit = findLookUpValue(this.props.units, unitId,  'Unit');
+      const funcShort = targetFunction.fields['Function_short'];
+      const funcLong = targetFunction.fields['Function_long'];
+
+      this._tableData[editedIndex].role = role;
+      this._tableData[editedIndex].unit = unit;
+      this._tableData[editedIndex].funcShort = funcShort;
+      this._tableData[editedIndex].funcLong = funcLong;
+    }
+
+   
+    
+    const indexIfAlreadyExist = this.dataToUpdate.findIndex((value) => value.id === editedData.id);
+    if (indexIfAlreadyExist > -1) {
+      this.dataToUpdate.splice(indexIfAlreadyExist, 1);
+    }
+    this.dataToUpdate.push(editedData);
+  }
+
   //React lifecycle
   componentDidMount() {
 
@@ -162,49 +173,11 @@ class Table extends React.Component {
         reactiveData:true,
         columns: getTableStructure(this.props.functions), //define table columns
         maxHeight:"100%",
-
-        cellEdited: (cell) => {
-          const editedData = cell.getData();
-          const currentData = this._table.getData();
-          const editedIndex = currentData.findIndex(value => value.id === editedData.id);
-
-
-          const targetFunction = this.props.functions.find((value) => {
-            return value.fields['Role_function'] === editedData.roleAndFunc
-          });
-
-          if (targetFunction) {
-            const roleId = targetFunction.fields['Role'];
-            const unitId = targetFunction.fields['Unit from role'];
-          
-            const role = findLookUpValue(this.props.roleUnit, roleId,  'Role in Unit');
-            const unit = findLookUpValue(this.props.units, unitId,  'Unit');
-            const funcShort = targetFunction.fields['Function_short'];
-            const funcLong = targetFunction.fields['Function_long'];
-
-            this._tableData[editedIndex].role = role;
-            this._tableData[editedIndex].unit = unit;
-            this._tableData[editedIndex].funcShort = funcShort;
-            this._tableData[editedIndex].funcLong = funcLong;
-          }
-
-         
-          
-          const indexIfAlreadyExist = this.dataToUpdate.findIndex((value) => value.id === editedData.id);
-          if (indexIfAlreadyExist > -1) {
-            this.dataToUpdate.splice(indexIfAlreadyExist, 1);
-          }
-          this.dataToUpdate.push(editedData);
-          this.dataToUpdate= this.dataToUpdate.slice();
-        },
-
-        rowClick: this.rowClickHandler
-        ,
-        selectable:1,
+        cellEdited: this.cellEditHandler,
+        rowClick: this.rowClickHandler,
+        selectable: 1,
       });
 
-      
-    
   }
 
 
@@ -227,13 +200,7 @@ class Table extends React.Component {
         filteredData = this._table.searchData('unit', '=', unitFilter);
       }
 
-      const rolesList = filteredData
-                .map((row) => {
-                  return row.role;
-                })
-                .filter((value, index, self) => {
-                  return self.indexOf(value) === index;
-                })
+      const rolesList = filteredData.map((row) => row.role).filter((value, index, self) => self.indexOf(value) === index);
       return rolesList;
     }
 
@@ -267,7 +234,6 @@ class Table extends React.Component {
             deleteTaskRows={this.props.deleteTaskRows}
             deleteRow={this.deleteRow}
             selectedRow={this._selectedRow}
-            dataToUpdate={this.dataToUpdate}
             getDataToUpdate={this.getDataToUpdate}
             cleanDataToUpdate={this.cleanDataToUpdate}
             rolesBasedOnUnits={this.makeRolesListBasedOnUnits()}

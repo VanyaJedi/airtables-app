@@ -66,6 +66,7 @@ const actionCreator = {
 
 
 const Operation = {
+
   loadTasks: () => (dispatch, getState, api) => {
     return api.get(`/airtables/tasks`)
       .then((response) => {

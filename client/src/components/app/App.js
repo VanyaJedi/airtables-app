@@ -1,41 +1,75 @@
 import React from 'react';
 import PageHeader from '../header/page-header';
 import Main  from '../main/main';
-import './App.scss';
+import Auth from '../auth/auth';
+import './app.scss';
 import {connect} from "react-redux";
 import {actionCreator as actionCreatorApp} from "../../reducer/app/app.js";
 import {Operation as dataOperation} from "../../reducer/data/data";
+import {Operation as userOperation} from "../../reducer/user/user";
 import {getLoadingStatus, getTasks, getUnits, getFunctions, getRoleUnit, getRoles} from "../../reducer/data/selectors.js";
+import {getUser, getAuthStatus} from "../../reducer/user/selectors.js";
 import {getActiveTab} from "../../reducer/app/selectors.js";
 
 class App extends React.Component {
 
-  render() {
-    const {isLoading, tasks, units, functions, roleUnit, roles, addTaskRow, updateTaskRows, deleteTaskRows, activeTab, switchActiveTab} = this.props;
+
+  renderApp() {
+    const {isLoading,
+      tasks, 
+      units, 
+      functions, 
+      roleUnit, 
+      roles, 
+      addTaskRow, 
+      updateTaskRows, 
+      deleteTaskRows, 
+      activeTab, 
+      switchActiveTab,
+      user,
+      logout          
+     } = this.props;
+
     return (
-      <div className="App">
-        <PageHeader 
-          activeTab={activeTab} 
-          switchActiveTab={switchActiveTab}
-        />
-        <Main 
-          isLoading={isLoading}
-          activeTab={activeTab}
-          tasks={tasks}
-          units={units}
-          functions={functions}
-          roleUnit={roleUnit}
-          addTaskRow={addTaskRow}
-          updateTaskRows={updateTaskRows}
-          deleteTaskRows={deleteTaskRows}
-          roles={roles}
-        />
-      </div>
+    <div className="App">
+      <PageHeader 
+        activeTab={activeTab} 
+        switchActiveTab={switchActiveTab}
+        user={user}
+        logout={logout}
+      />
+      <Main 
+        isLoading={isLoading}
+        activeTab={activeTab}
+        tasks={tasks}
+        units={units}
+        functions={functions}
+        roleUnit={roleUnit}
+        addTaskRow={addTaskRow}
+        updateTaskRows={updateTaskRows}
+        deleteTaskRows={deleteTaskRows}
+        roles={roles}
+      />
+    </div>
     );
+  }
+
+  render() {
+   const { 
+      user,       
+     } = this.props;
+
+    if (!user) {
+     return  <Auth />;
+    }
+   
+    return this.renderApp();
   }
 }
 
 const mapStateToProps = (state) => ({
+  user: getUser(state),
+  authStatus: getAuthStatus(state),
   activeTab: getActiveTab(state),
   roles: getRoles(state),
   tasks: getTasks(state),
@@ -62,8 +96,12 @@ const mapDispatchToProps = (dispatch) => ({
 
   switchActiveTab(data) {
     return dispatch(actionCreatorApp.switchTab(data));
+  },
+
+  logout() {
+    return dispatch(userOperation.logout());
   }
-  
+
 });
 
 export {App};

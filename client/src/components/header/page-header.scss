@@ -42,3 +42,14 @@
         }
     }
 }
+
+.page-header__profile {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+
+    span {
+        font-weight: bold;
+        margin-right: 15px;
+    }
+}

@@ -2,8 +2,7 @@ import React from 'react';
 import './page-header.scss';
 import {tabs} from "../../constants";
 
-const PageHeader = ({activeTab, switchActiveTab}) => {
-
+const PageHeader = ({activeTab, switchActiveTab, user, logout}) => {
 
     return (
         <header className="page-header"> 
@@ -25,6 +24,15 @@ const PageHeader = ({activeTab, switchActiveTab}) => {
                             );
                     })}
                 </ul>
+                <form 
+                    onSubmit={(evt) => {
+                        evt.preventDefault();
+                        logout();
+                    }}
+                    className="page-header__profile">
+                    <span>{user.name}</span>
+                    <button className="btn btn--logout">Выйти</button>
+                </form>
             </div>
         </header>
     );

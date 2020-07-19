@@ -3,9 +3,7 @@ import './controls.scss';
 import {adaptDataToRaw} from "../../adapters/tasks";
 
 const Controls = ({ units, 
-                    roles, 
                     functions,
-                    roleUnit, 
                     setFilterUnits, 
                     setFilterRoles, 
                     addTaskRow, 
@@ -14,7 +12,6 @@ const Controls = ({ units,
                     deleteTaskRows, 
                     selectedRow, 
                     deleteRow,
-                    dataToUpdate,
                     cleanDataToUpdate,
                     rolesBasedOnUnits,
                     getDataToUpdate
@@ -73,7 +70,10 @@ const Controls = ({ units,
           <div className="controls__change-table">
             <button onClick={()=>{
                 addTaskRow(emptyRow)
-                .then((res) => addEmptyTaskRow(res));
+                .then((res) => {
+                  console.log(res);
+                  addEmptyTaskRow(res)
+                });
 
             }} type="button" className="btn controls__add">Добавить строчку</button>
             <button   onClick=  {()=>{
@@ -90,9 +90,7 @@ const Controls = ({ units,
           </div>
           <button
             onClick={()=>{
-              console.log(getDataToUpdate());
               const adaptedData = adaptDataToRaw(getDataToUpdate(), functions);
-              console.log(dataToUpdate);
               updateTaskRows(adaptedData)
               .then((res) => {
                 cleanDataToUpdate()
